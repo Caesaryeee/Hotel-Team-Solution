@@ -1,0 +1,477 @@
+/* ============================================================
+   enhancements.css — Additive professional polish layer
+   Loaded AFTER styles.css. Zero overrides to original content.
+   ============================================================ */
+
+/* ===== 1. Accordion Smooth Animation ===== */
+/*
+ * The original accordion uses display:none → display:block (instant toggle).
+ * We replace that with a max-height transition trick so the body slides open.
+ */
+.acc-body {
+  display: block !important;
+  /* always rendered, control via max-height */
+  max-height: 0;
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  transition:
+    max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.22s ease,
+    padding 0.22s ease;
+}
+
+.acc-item.open .acc-body {
+  max-height: 2000px;
+  /* large enough for any content */
+  overflow: visible;
+  opacity: 1;
+  padding-top: var(--s4);
+  padding-bottom: var(--s4);
+}
+
+/* Restore zero-padding variant used for table-wrap accordions */
+.acc-item.open .acc-body[style*="padding:0"] {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* ===== 2. Chart Placeholder — Static Muted Background ===== */
+/* No animation; stays quiet until Chart.js renders */
+.chart-ph:not(.chart-ready) {
+  background: var(--c-surface2);
+}
+
+body.dark .chart-ph:not(.chart-ready) {
+  background: #2a2a2a;
+}
+
+/* Mark chart as ready (set by enhancements.js) */
+.chart-ph.chart-ready {
+  background: var(--c-surface2);
+  animation: none;
+}
+
+/* ===== 3. Styled Scrollbars (Webkit) ===== */
+.nav-rail::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar,
+.dialog-body::-webkit-scrollbar,
+.dlg-cal-wrap::-webkit-scrollbar,
+.main-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.nav-rail::-webkit-scrollbar-track,
+.chat-messages::-webkit-scrollbar-track,
+.dialog-body::-webkit-scrollbar-track,
+.dlg-cal-wrap::-webkit-scrollbar-track,
+.main-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav-rail::-webkit-scrollbar-thumb,
+.chat-messages::-webkit-scrollbar-thumb,
+.dialog-body::-webkit-scrollbar-thumb,
+.dlg-cal-wrap::-webkit-scrollbar-thumb,
+.main-scroll::-webkit-scrollbar-thumb {
+  background: var(--c-border2);
+  border-radius: 10px;
+}
+
+.nav-rail::-webkit-scrollbar-thumb:hover,
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--c-text5);
+}
+
+/* ===== 4. Error Badge — Static Highlight (no pulse) ===== */
+.badge-err {
+  box-shadow: 0 0 0 2px rgba(201, 29, 29, 0.2);
+}
+
+/* ===== 5. Chip Micro-Animation ===== */
+.chip {
+  transition: all 0.12s ease, transform 0.1s ease !important;
+}
+
+.chip:hover {
+  transform: translateY(-1px);
+}
+
+.chip.active:hover {
+  transform: none;
+  /* active chips don't lift */
+}
+
+/* ===== 6. KPI Card Subtle Hover (no sweep animation) ===== */
+.kpi-card.dark[role="button"]:hover {
+  filter: brightness(1.12);
+  transition: filter 0.2s ease;
+}
+
+/* ===== 7. Dialog Backdrop Fade ===== */
+.dialog-overlay {
+  animation: none;
+  transition: opacity 0.18s ease;
+}
+
+@keyframes dlg-backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.dialog-overlay.open {
+  animation: dlg-backdrop-in 0.18s ease forwards;
+}
+
+@keyframes dlg-box-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.dialog-overlay.open .dialog-box {
+  animation: dlg-box-in 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ===== 8. Sortable Table Headers ===== */
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+}
+
+th.sortable::after {
+  content: ' ⇅';
+  font-size: 9px;
+  color: var(--c-text5);
+  opacity: 0.6;
+  margin-left: 3px;
+}
+
+th.sortable:hover {
+  background: #e8e8e8;
+  color: var(--c-text);
+}
+
+th.sortable.sort-asc::after {
+  content: ' ↑';
+  color: var(--c-black);
+  opacity: 1;
+}
+
+th.sortable.sort-desc::after {
+  content: ' ↓';
+  color: var(--c-black);
+  opacity: 1;
+}
+
+body.dark th.sortable:hover {
+  background: #2a2a2a;
+}
+
+/* ===== 9. Stronger Focus Ring in Dialogs (Accessibility) ===== */
+.dialog-box :focus-visible {
+  outline: 3px solid var(--c-black);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ===== 10. Keyboard Shortcut Badge on AI Launcher ===== */
+.ai-launcher-shortcut {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 14px;
+  opacity: 0.7;
+  margin-left: 2px;
+}
+
+/* ===== 11. Relative Timestamp Styling ===== */
+.rel-time {
+  font-size: 10px;
+  color: var(--c-text5);
+  margin-left: 5px;
+  font-style: italic;
+  font-family: var(--ff);
+}
+
+/* ===== 12. Dark Mode Completions ===== */
+body.dark .acc-body {
+  background: #1e1e1e;
+  border-top-color: #333;
+}
+
+body.dark .acc-trigger {
+  background: #252525;
+  color: #ddd;
+}
+
+body.dark .acc-trigger:hover {
+  background: #2e2e2e;
+}
+
+body.dark .filter-bar {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark .finput {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #ddd;
+}
+
+body.dark .finput:focus {
+  background: #252525;
+  border-color: var(--c-black);
+}
+
+body.dark .card {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark .table-wrap {
+  border-color: #333;
+}
+
+body.dark th {
+  background: #252525;
+  color: #aaa;
+  border-bottom-color: #444;
+}
+
+body.dark td {
+  border-bottom-color: #333;
+  color: #ccc;
+}
+
+body.dark tr:hover td {
+  background: #252525;
+}
+
+body.dark .dialog-box {
+  background: #1e1e1e;
+  color: #ddd;
+}
+
+body.dark .dialog-header {
+  border-bottom-color: #333;
+}
+
+body.dark .dialog-close {
+  color: #aaa;
+}
+
+body.dark .dialog-close:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+body.dark .chat-composer {
+  background: #1e1e1e;
+  border-top-color: #333;
+}
+
+body.dark .chat-input {
+  background: #252525;
+  border-color: #444;
+  color: #ddd;
+}
+
+body.dark .chat-sugg {
+  background: #252525;
+  border-color: #444;
+  color: #bbb;
+}
+
+body.dark .chat-sugg:hover {
+  background: #1e1e1e;
+  border-color: var(--c-black);
+  color: #fff;
+}
+
+body.dark .report-card {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark .res-card {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark .kpi-card {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+body.dark .chip {
+  background: #252525;
+  border-color: #444;
+  color: #bbb;
+}
+
+body.dark .chip.active {
+  background: var(--c-black);
+  color: #fff;
+  border-color: var(--c-black);
+}
+
+/* ===== 13. Print Stylesheet ===== */
+@media print {
+
+  /* Hide navigation chrome */
+  .topbar,
+  .nav-rail,
+  .chat-dock,
+  .dialog-overlay,
+  #theme-toggle-btn,
+  .filter-bar .btn,
+  .btn-primary,
+  .skip-link {
+    display: none !important;
+  }
+
+  /* Reset layout to full width */
+  .layout {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .main-scroll {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Expand all accordions */
+  .acc-body {
+    max-height: none !important;
+    display: block !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure all screens show */
+  .screen {
+    display: block !important;
+  }
+
+  /* Page breaks */
+  .module {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Clean typography */
+  body {
+    font-size: 12px;
+    color: #000;
+    background: #fff;
+  }
+
+  .kpi-card.dark {
+    background: #222 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ===== 14. Reduced Motion (Accessibility) ===== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .acc-body {
+    transition: none !important;
+  }
+
+  .kpi-card.dark[role="button"]:hover {
+    filter: none !important;
+  }
+}
+
+/* ===== 15. Nav Rail Smooth Item Hover ===== */
+.nav-btn {
+  transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease !important;
+}
+
+.nav-btn.feat:hover {
+  padding-left: calc(var(--s8) + 3px);
+}
+
+.nav-btn.feat.nav-sub:hover {
+  padding-left: calc(var(--s8) + 15px);
+}
+
+/* ===== 16. Table Row Transition ===== */
+tr {
+  transition: background 0.1s ease;
+}
+
+/* ===== 17. Report Card Depth ===== */
+.report-card {
+  transition: box-shadow 0.22s ease, border-color 0.22s ease, transform 0.22s ease !important;
+}
+
+.report-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.09) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ===== 18. Loading State on Buttons ===== */
+.btn.loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  top: 50%;
+  left: 50%;
+  margin: -7px 0 0 -7px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-ghost.loading::after {
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-top-color: var(--c-text);
+}
